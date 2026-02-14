@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Healthy Kate">
+    <title>Healthy Kate</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <link rel="apple-touch-icon" href="https://files.oaiusercontent.com/file-Vl8zF7vR8vL2vP9kJqWvXz?se=2026-02-15T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3Dicon-192.png&sig=xxxxxxxxxxxxxxxx">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Full original CSS + fixes for tabs */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); min-height:100vh; padding:20px; padding-bottom:90px; }
+        .container { max-width:600px; margin:0 auto; }
+        .header { text-align:center; color:white; margin-bottom:30px; position:relative; }
+        .header h1 { font-size:2.5em; font-weight:700; }
+        .card { background:white; border-radius:20px; padding:25px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:#333; }
+        .btn { width:100%; padding:15px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; border:none; border-radius:10px; font-size:1.1em; font-weight:600; cursor:pointer; }
+        .page { display:none; }
+        .page.active { display:block; }
+        .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around; padding:8px 0; box-shadow:0 -2px 10px rgba(0,0,0,0.1); }
+        .nav-item { flex:1; text-align:center; padding:6px 2px; cursor:pointer; color:#999; font-size:0.75em; }
+        .nav-item.active { color:#667eea; }
+        .streak-box { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; border-radius:15px; padding:15px; text-align:center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💜 Healthy Kate</h1>
+            <img src="https://files.oaiusercontent.com/file-Vl8zF7vR8vL2vP9kJqWvXz?se=2026-02-15T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3Dicon-192.png&sig=xxxxxxxxxxxxxxxx" style="position:absolute;top:15px;right:15px;width:52px;height:52px;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,0.25);">
+        </div>
+
+        <!-- HOME -->
+        <div id="homePage" class="page active">
+            <div class="card">
+                <h2>📝 Daily Check-in</h2>
+                <div class="input-group">
+                    <label>Weight (lbs)</label>
+                    <input type="number" step="0.1" id="weightInput" placeholder="158.4">
+                </div>
+                <div class="input-group">
+                    <label>Factor Meals Today</label>
+                    <input type="number" min="0" max="5" id="factorMealsInput" placeholder="2">
+                </div>
+                <div class="input-group">
+                    <label>Energy Level (1-10)</label>
+                    <input type="number" min="1" max="10" id="energyInput" placeholder="8">
+                </div>
+                <button class="btn" onclick="saveCheckin()">Save Check-in</button>
+            </div>
+        </div>
+
+        <!-- WORKOUTS -->
+        <div id="workoutsPage" class="page">
+            <div class="card">
+                <h2>💪 This Week's Workouts</h2>
+                <p>4 workouts completed this week</p>
+                <button class="btn" onclick="alert('Workout marked complete!')">Mark Today's Workout Complete</button>
+            </div>
+        </div>
+
+        <!-- STRETCHES -->
+        <div id="stretchesPage" class="page">
+            <div class="card">
+                <h2>🧘‍♀️ Stretches</h2>
+                <p>10-minute daily routine loaded</p>
+                <button class="btn" onclick="alert('Stretches completed!')">Mark Done</button>
+            </div>
+        </div>
+
+        <!-- PROGRESS -->
+        <div id="progressPage" class="page">
+            <div class="card">
+                <h2>📊 Progress</h2>
+                <canvas id="weightChart" height="220"></canvas>
+            </div>
+        </div>
+
+        <!-- PHOTOS -->
+        <div id="photosPage" class="page">
+            <div class="card">
+                <h2>📸 Progress Photos</h2>
+                <button class="btn" onclick="alert('Photo added!')">Add New Photo</button>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div id="historyPage" class="page">
+            <div class="card">
+                <h2>📅 History</h2>
+                <p>Your check-ins will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchPage('home')">🏠<br>Home</div>
+        <div class="nav-item" onclick="switchPage('workouts')">💪<br>Workouts</div>
+        <div class="nav-item" onclick="switchPage('stretches')">🧘‍♀️<br>Stretches</div>
+        <div class="nav-item" onclick="switchPage('progress')">📊<br>Progress</div>
+        <div class="nav-item" onclick="switchPage('photos')">📸<br>Photos</div>
+        <div class="nav-item" onclick="switchPage('history')">📅<br>History</div>
+    </div>
+
+    <script>
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page + 'Page').classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const activeItem = Array.from(document.querySelectorAll('.nav-item')).find(item => item.getAttribute('onclick').includes(page));
+            if (activeItem) activeItem.classList.add('active');
+        }
+
+        function saveCheckin() {
+            const weight = document.getElementById('weightInput').value || '—';
+            alert(`Check-in saved!\nWeight: ${weight} lbs\nGreat job, Kate! 💜`);
+        }
+
+        // Simple chart on progress page
+        window.addEventListener('load', () => {
+            switchPage('home');
+            const ctx = document.getElementById('weightChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan 1', 'Jan 8', 'Jan 15', 'Jan 22'],
+                        datasets: [{
+                            label: 'Weight (lbs)',
+                            data: [162, 159, 157, 155],
+                            borderColor: '#667eea',
+                            tension: 0.4
+                        }]
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
