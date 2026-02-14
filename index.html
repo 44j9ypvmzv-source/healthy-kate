@@ -1,0 +1,3115 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Healthy Kate">
+    <title>Healthy Kate - Health Coaching</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        padding-bottom: 80px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .header .tagline {
+        font-size: 1.1em;
+        opacity: 0.9;
+    }
+
+    .card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .card h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+    }
+
+    .streak-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .streak-box {
+        text-align: center;
+        flex: 1;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        color: white;
+        margin: 0 5px;
+    }
+
+    .streak-number {
+        font-size: 2em;
+        font-weight: bold;
+        display: block;
+    }
+
+    .streak-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+        margin-top: 5px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .input-group input, .input-group textarea, .input-group select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .input-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .btn:active {
+        transform: scale(0.98);
+    }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .insight-box {
+        background: #f8f9ff;
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 4px solid #667eea;
+        margin-top: 20px;
+    }
+
+    .insight-box h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+    }
+
+    .insight-box p {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 250px;
+        margin-top: 20px;
+    }
+
+    .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        background: #f5f5f5;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    .tab {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .tab.active {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .history-item {
+        padding: 15px;
+        background: #f8f9ff;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .history-item .date {
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+
+    .history-item .data {
+        color: #555;
+        font-size: 0.95em;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+    }
+
+    .empty-state-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
+
+    .success-message {
+        background: #4caf50;
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .metric-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .metric-card {
+        background: #f8f9ff;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .metric-value {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .metric-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 6px 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-item {
+        flex: 1;
+        text-align: center;
+        padding: 6px 2px;
+        cursor: pointer;
+        color: #999;
+        font-size: 0.7em;
+        transition: color 0.3s;
+    }
+
+    .nav-item.active {
+        color: #667eea;
+    }
+
+    .nav-icon {
+        font-size: 1.3em;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .page {
+        display: none;
+    }
+
+    .page.active {
+        display: block;
+    }
+
+    /* Workout Styles */
+    .workout-week-tracker {
+        padding: 20px;
+    }
+
+    .week-progress-bar {
+        width: 100%;
+        height: 20px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .week-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        width: 0%;
+        transition: width 0.5s ease;
+    }
+
+    .weekly-plan {
+        margin-top: 15px;
+    }
+
+    .plan-day {
+        background: #f8f9ff;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border-left: 4px solid #667eea;
+    }
+
+    .plan-day-header {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .day-icon {
+        font-size: 1.3em;
+        margin-right: 10px;
+    }
+
+    .plan-day-desc {
+        color: #666;
+        font-size: 0.9em;
+        margin-left: 35px;
+    }
+
+    .workout-card {
+        border-left: 5px solid #667eea;
+    }
+
+    .workout-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .workout-header h2 {
+        margin: 0;
+    }
+
+    .workout-time {
+        background: #f8f9ff;
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #667eea;
+        font-size: 0.9em;
+    }
+
+    .workout-section {
+        margin-bottom: 25px;
+    }
+
+    .workout-section h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+    }
+
+    .workout-section p {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .exercise-block {
+        background: #f8f9ff;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .exercise-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.05em;
+    }
+
+    .exercise-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .exercise-list li {
+        padding: 8px 0;
+        color: #555;
+        line-height: 1.6;
+        padding-left: 20px;
+        position: relative;
+    }
+
+    .exercise-list li:before {
+        content: "•";
+        color: #667eea;
+        font-weight: bold;
+        font-size: 1.2em;
+        position: absolute;
+        left: 0;
+    }
+
+    .workout-tips {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+
+    .workout-tips h4 {
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+
+    .workout-tips p {
+        color: #555;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .workout-completed {
+        opacity: 0.7;
+    }
+
+    .workout-completed .btn {
+        background: #4caf50;
+    }
+
+    .bible-verse {
+        background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        display: flex;
+        align-items: flex-start;
+        border: 2px solid #e8eaf6;
+    }
+
+    .verse-icon {
+        font-size: 2em;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .verse-content {
+        flex: 1;
+    }
+
+    .verse-text {
+        color: #333;
+        font-style: italic;
+        line-height: 1.7;
+        margin-bottom: 10px;
+        font-size: 1.05em;
+    }
+
+    .verse-reference {
+        color: #667eea;
+        font-weight: 600;
+        margin: 0;
+        text-align: right;
+    }
+
+    /* Supplement Reminder Styles */
+    .supplement-reminder {
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+        padding: 20px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+    }
+
+    .supplement-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .supplement-icon {
+        font-size: 2.5em;
+        flex-shrink: 0;
+    }
+
+    .supplement-text {
+        flex: 1;
+    }
+
+    .supplement-text h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.3em;
+        font-weight: 700;
+    }
+
+    .supplement-text p {
+        margin: 0;
+        font-size: 1em;
+        opacity: 0.95;
+    }
+
+    .supplement-btn {
+        background: white;
+        color: #4caf50;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        font-size: 2em;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .supplement-btn:active {
+        transform: scale(0.95);
+    }
+
+    .supplement-reminder.checked {
+        background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%);
+    }
+
+    .supplement-reminder.checked .supplement-btn {
+        background: white;
+        color: #4caf50;
+    }
+
+    /* Photo Gallery Styles */
+    .photo-upload-section {
+        margin: 20px 0;
+    }
+
+    .photo-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .photo-item {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f5f5f5;
+        aspect-ratio: 3/4;
+    }
+
+    .photo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .photo-date {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        color: white;
+        padding: 10px 8px 8px 8px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .photo-delete {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(255,255,255,0.9);
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #f44336;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .photo-delete:active {
+        transform: scale(0.95);
+    }
+
+    .photo-comparison {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #e0e0e0;
+    }
+
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .comparison-item {
+        text-align: center;
+    }
+
+    .comparison-item img {
+        width: 100%;
+        border-radius: 12px;
+        border: 3px solid #667eea;
+    }
+
+    .comparison-label {
+        margin-top: 8px;
+        font-weight: 600;
+        color: #667eea;
+    }
+
+    @media (max-width: 400px) {
+        .photo-gallery {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Nutrition Tracking Styles */
+    .nutrition-targets {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
+        border-radius: 12px;
+        border: 2px solid #e8eaf6;
+    }
+
+    .target-box {
+        text-align: center;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+    }
+
+    .target-label {
+        font-size: 0.85em;
+        color: #666;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .target-value {
+        font-size: 1.2em;
+        color: #667eea;
+        font-weight: bold;
+    }
+
+    .macro-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .macro-input-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .macro-input-row label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .macro-input-row input {
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    .macro-input-row input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    /* Month Workouts Styles */
+    .month-workouts {
+        display: none;
+    }
+
+    .month-workouts.active {
+        display: block;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💜 Healthy Kate</h1>
+            <p class="tagline">Your personal health companion</p>
+        </div>
+
+```
+    <!-- Home Page -->
+    <div id="homePage" class="page active">
+        <div id="successMessage" style="display: none;" class="success-message">
+            ✓ Check-in saved successfully!
+        </div>
+
+        <!-- Daily Supplement Reminder -->
+        <div class="card supplement-reminder">
+            <div class="supplement-content">
+                <div class="supplement-icon">💊</div>
+                <div class="supplement-text">
+                    <h3>Daily Supplement Reminder</h3>
+                    <p>Have you taken your supplements today?</p>
+                </div>
+                <button class="supplement-btn" id="supplementBtn" onclick="toggleSupplementCheck()">
+                    <span id="supplementCheckmark">☐</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Streak Section -->
+        <div class="card">
+            <h2>🔥 Your Streaks</h2>
+            <div class="streak-container">
+                <div class="streak-box">
+                    <span class="streak-number" id="currentStreak">0</span>
+                    <span class="streak-label">Day Streak</span>
+                </div>
+                <div class="streak-box">
+                    <span class="streak-number" id="factorMealsWeek">0/14</span>
+                    <span class="streak-label">Factor Meals</span>
+                </div>
+                <div class="streak-box">
+                    <span class="streak-number" id="totalCheckins">0</span>
+                    <span class="streak-label">Check-ins</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Check-in -->
+        <div class="card">
+            <h2>📝 Daily Check-in</h2>
+            <div class="input-group">
+                <label>Weight (lbs)</label>
+                <input type="number" step="0.1" id="weightInput" placeholder="Enter your weight">
+            </div>
+            <div class="input-group">
+                <label>🍽️ Factor Meals Today</label>
+                <input type="number" min="0" max="5" id="factorMealsInput" placeholder="How many Factor meals? (0-5)">
+                <div style="margin-top: 8px; font-size: 0.9em; color: #666;">
+                    <span id="factorWeeklyCount">0</span> of 14 Factor meals this week
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Daily Nutrition Tracking</label>
+                <div class="nutrition-targets">
+                    <div class="target-box">
+                        <div class="target-label">Calories</div>
+                        <div class="target-value">1,600-1,700</div>
+                    </div>
+                    <div class="target-box">
+                        <div class="target-label">Protein</div>
+                        <div class="target-value">120-140g</div>
+                    </div>
+                    <div class="target-box">
+                        <div class="target-label">Carbs</div>
+                        <div class="target-value">130-150g</div>
+                    </div>
+                    <div class="target-box">
+                        <div class="target-label">Fat</div>
+                        <div class="target-value">50-60g</div>
+                    </div>
+                </div>
+                <div class="macro-inputs">
+                    <div class="macro-input-row">
+                        <label>Today's Calories</label>
+                        <input type="number" id="caloriesInput" placeholder="1,600-1,700">
+                    </div>
+                    <div class="macro-input-row">
+                        <label>Protein (g)</label>
+                        <input type="number" id="proteinInput" placeholder="120-140g">
+                    </div>
+                    <div class="macro-input-row">
+                        <label>Carbs (g)</label>
+                        <input type="number" id="carbsInput" placeholder="130-150g">
+                    </div>
+                    <div class="macro-input-row">
+                        <label>Fat (g)</label>
+                        <input type="number" id="fatInput" placeholder="50-60g">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Meals & Notes</label>
+                <textarea id="nutritionInput" placeholder="What did you eat today? How did you feel? Any wins or challenges?"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Exercise & Activity</label>
+                <textarea id="exerciseInput" placeholder="What activity did you do? How long? How did it feel?"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Energy Level (1-10)</label>
+                <input type="number" min="1" max="10" id="energyInput" placeholder="1 (low) to 10 (high)">
+            </div>
+            <div class="input-group">
+                <label>Notes & Reflections</label>
+                <textarea id="notesInput" placeholder="How are you feeling overall? Any wins or challenges?"></textarea>
+            </div>
+            <button class="btn" onclick="saveCheckin()">Save Today's Check-in</button>
+        </div>
+
+        <!-- Nutrition Guide -->
+        <div class="card">
+            <div class="insight-box">
+                <h3>🥗 Your Nutrition Plan Explained</h3>
+                <p style="margin-bottom: 15px;"><strong>Current:</strong> 160 lbs | <strong>Goal:</strong> 145 lbs | <strong>Height:</strong> 5'9"</p>
+                
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">Why 1,600-1,700 calories?</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.95em;">This creates a moderate deficit for steady fat loss (1-1.5 lbs/week) while keeping your energy up for workouts and daily life. Not too aggressive, perfectly sustainable!</p>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">Why high protein (120-140g)?</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.95em;">Protein preserves your muscle while losing fat, keeps you full longer, and supports your strength training. Aim for 30-40g per meal.</p>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">Carbs & Fats:</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.95em;">Moderate carbs fuel your workouts. Healthy fats support hormones and keep you satisfied. Balance is key!</p>
+                </div>
+
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #e8eaf6;">
+                    <strong style="color: #667eea;">💡 Quick Wins:</strong>
+                    <ul style="margin: 8px 0 0 20px; font-size: 0.95em; line-height: 1.7;">
+                        <li>Factor meals make hitting these targets SO much easier</li>
+                        <li>Track your food in MyFitnessPal or similar app</li>
+                        <li>Don't stress about being perfect - aim for consistency over perfection</li>
+                        <li>One off day won't derail you - just get back on track tomorrow</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Insight -->
+        <div class="card" id="insightCard" style="display: none;">
+            <div class="insight-box">
+                <h3>💡 Today's Insight</h3>
+                <p id="insightText"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workouts Page -->
+    <div id="workoutsPage" class="page">
+        <!-- Workout Tracker -->
+        <div class="card">
+            <h2>💪 This Week's Workouts</h2>
+            <div class="workout-week-tracker">
+                <div class="week-progress-bar">
+                    <div class="week-progress-fill" id="weekProgressFill"></div>
+                </div>
+                <div style="text-align: center; margin-top: 10px; font-size: 1.1em; color: #667eea; font-weight: 600;">
+                    <span id="workoutsThisWeek">0</span> of 4 workouts completed
+                </div>
+            </div>
+        </div>
+
+        <!-- Month Selection -->
+        <div class="card">
+            <h2>📅 Select Your Month</h2>
+            <div class="tabs">
+                <div class="tab active" onclick="switchMonth(1)">Month 1</div>
+                <div class="tab" onclick="switchMonth(2)">Month 2</div>
+                <div class="tab" onclick="switchMonth(3)">Month 3</div>
+            </div>
+            <div style="margin-top: 15px; padding: 15px; background: #f8f9ff; border-radius: 10px;">
+                <div id="monthDescription">
+                    <strong style="color: #667eea;">Month 1: Foundation Building</strong>
+                    <p style="margin: 5px 0 0 0; color: #666;">Focus on learning proper form, building base fitness, and establishing the habit. Light weights, manageable intensity.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 1 WORKOUTS -->
+        <div class="month-workouts" id="month1Workouts">
+            <!-- Weekly Plan Overview -->
+            <div class="card">
+                <h2>📅 Month 1 Weekly Plan</h2>
+                <div class="weekly-plan">
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🏃‍♀️</span>
+                            <span>Workout 1: Cardio Foundation</span>
+                        </div>
+                        <div class="plan-day-desc">Treadmill walking + light stretch</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">💪</span>
+                            <span>Workout 2: Total Body Strength</span>
+                        </div>
+                        <div class="plan-day-desc">Dumbbells + bodyweight exercises</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🏋️‍♀️</span>
+                            <span>Workout 3: Gym Day</span>
+                        </div>
+                        <div class="plan-day-desc">Equipment-based full body workout</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🔥</span>
+                            <span>Workout 4: Active Recovery</span>
+                        </div>
+                        <div class="plan-day-desc">Easy cardio + sauna + mobility</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Month 1 Workout Cards -->
+        <div class="card workout-card" id="workout1">
+            <div class="workout-header">
+                <h2>🏃‍♀️ Workout 1: Cardio Foundation</h2>
+                <div class="workout-time">25-30 minutes</div>
+            </div>
+            
+            <div class="workout-section">
+                <h3>💡 Goal</h3>
+                <p>Build cardiovascular endurance gently. Start establishing the habit of movement.</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 The Workout</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Warm-up (5 min)</div>
+                    <ul class="exercise-list">
+                        <li>Walk at easy pace on treadmill (2.0-2.5 mph)</li>
+                        <li>Focus on comfortable breathing</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Main Cardio (15-20 min)</div>
+                    <ul class="exercise-list">
+                        <li><strong>Beginner:</strong> Walk at moderate pace (2.5-3.0 mph), flat or slight incline (0-2%)</li>
+                        <li><strong>Building up:</strong> Walk at brisk pace (3.0-3.5 mph) with incline (2-4%)</li>
+                        <li><strong>Listen to your body:</strong> You should be able to talk but feel like you're working</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Cool Down (5 min)</div>
+                    <ul class="exercise-list">
+                        <li>Slow walk (2.0 mph)</li>
+                        <li>Light stretching: calves, hamstrings, quads</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>Don't worry about speed! Consistency matters more than intensity right now. If you can do this twice a week instead of once, even better.</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"Do you not know that in a race all the runners run, but only one gets the prize? Run in such a way as to get the prize."</p>
+                    <p class="verse-reference">— 1 Corinthians 9:24</p>
+                </div>
+            </div>
+
+            <button class="btn" onclick="markWorkoutComplete(1)">Mark Complete</button>
+        </div>
+
+        <div class="card workout-card" id="workout2">
+            <div class="workout-header">
+                <h2>💪 Workout 2: Total Body Strength</h2>
+                <div class="workout-time">30-35 minutes</div>
+            </div>
+            
+            <div class="workout-section">
+                <h3>💡 Goal</h3>
+                <p>Build functional strength for daily life. Start with light weights and perfect form.</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 The Workout</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Warm-up (5 min)</div>
+                    <ul class="exercise-list">
+                        <li>Arm circles: 10 forward, 10 backward</li>
+                        <li>Bodyweight squats: 10 reps (just practice form)</li>
+                        <li>March in place: 1 minute</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Main Workout (Do 2-3 rounds)</div>
+                    <ul class="exercise-list">
+                        <li><strong>Goblet Squats</strong> - 10 reps (hold 10-15 lb dumbbell at chest)</li>
+                        <li><strong>Push-ups</strong> - 8-10 reps (on knees is perfect!)</li>
+                        <li><strong>Dumbbell Rows</strong> - 10 reps each arm (8-12 lbs, use bench for support)</li>
+                        <li><strong>Glute Bridges</strong> - 15 reps (on floor, no weights needed)</li>
+                        <li><strong>Shoulder Press</strong> - 10 reps (5-8 lb dumbbells)</li>
+                        <li><strong>Plank Hold</strong> - 20-30 seconds (on knees is great)</li>
+                        <li>Rest 60-90 seconds between rounds</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Cool Down (5 min)</div>
+                    <ul class="exercise-list">
+                        <li>Child's pose: 30 seconds</li>
+                        <li>Cat-cow stretches: 10 reps</li>
+                        <li>Standing quad stretch: 30 seconds each leg</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>Form over weight, always! It's better to use 5 lbs with perfect form than 15 lbs with poor form. Film yourself if possible - you'll be amazed at your progress.</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"She sets about her work vigorously; her arms are strong for her tasks."</p>
+                    <p class="verse-reference">— Proverbs 31:17</p>
+                </div>
+            </div>
+
+            <button class="btn" onclick="markWorkoutComplete(2)">Mark Complete</button>
+        </div>
+
+        <div class="card workout-card" id="workout3">
+            <div class="workout-header">
+                <h2>🏋️‍♀️ Workout 3: Gym Day</h2>
+                <div class="workout-time">40-45 minutes</div>
+            </div>
+            
+            <div class="workout-section">
+                <h3>💡 Goal</h3>
+                <p>Take advantage of gym equipment for a full-body strength session. Ask for help with machines!</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 The Workout</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Warm-up (5-7 min)</div>
+                    <ul class="exercise-list">
+                        <li>5 minutes on bike or elliptical (easy pace)</li>
+                        <li>Dynamic stretches: leg swings, arm circles</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Main Workout (Do 2-3 sets of each)</div>
+                    <ul class="exercise-list">
+                        <li><strong>Leg Press Machine</strong> - 12 reps (start light, focus on full range)</li>
+                        <li><strong>Chest Press Machine</strong> - 10 reps (ask trainer to show you)</li>
+                        <li><strong>Lat Pulldown</strong> - 10 reps (great for back strength)</li>
+                        <li><strong>Leg Curl Machine</strong> - 12 reps (builds hamstrings)</li>
+                        <li><strong>Cable Rows</strong> - 10 reps (posture builder!)</li>
+                        <li><strong>Walking Lunges</strong> - 10 each leg (bodyweight or light dumbbells)</li>
+                        <li><strong>Bicycle Crunches</strong> - 20 reps (core finisher)</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Cool Down (5 min)</div>
+                    <ul class="exercise-list">
+                        <li>Easy walk on treadmill</li>
+                        <li>Full body stretch routine</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>Don't be intimidated by the gym! Most people are focused on their own workout. Start with machines rather than free weights - they guide your movement and are safer as you learn.</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."</p>
+                    <p class="verse-reference">— Colossians 3:23</p>
+                </div>
+            </div>
+
+            <button class="btn" onclick="markWorkoutComplete(3)">Mark Complete</button>
+        </div>
+
+        <div class="card workout-card" id="workout4">
+            <div class="workout-header">
+                <h2>🔥 Workout 4: Active Recovery</h2>
+                <div class="workout-time">35-40 minutes</div>
+            </div>
+            
+            <div class="workout-section">
+                <h3>💡 Goal</h3>
+                <p>Move gently, promote recovery, reduce inflammation with sauna. This is self-care disguised as exercise!</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 The Workout</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Easy Cardio (15-20 min)</div>
+                    <ul class="exercise-list">
+                        <li>Gentle walk on treadmill (2.0-2.8 mph, no incline)</li>
+                        <li>OR light bike ride (very easy resistance)</li>
+                        <li>Keep your heart rate conversational</li>
+                        <li>This should feel restorative, not taxing</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Mobility & Flexibility (10 min)</div>
+                    <ul class="exercise-list">
+                        <li><strong>Cat-Cow</strong> - 10 slow reps</li>
+                        <li><strong>Hip Circles</strong> - 10 each direction</li>
+                        <li><strong>Shoulder Rolls</strong> - 10 forward, 10 back</li>
+                        <li><strong>Seated Forward Fold</strong> - Hold 30 seconds</li>
+                        <li><strong>Figure-4 Stretch</strong> - 30 seconds each leg</li>
+                        <li><strong>Neck Stretches</strong> - Gentle tilts, 30 seconds each side</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Infrared Sauna Session (15-20 min)</div>
+                    <ul class="exercise-list">
+                        <li>Temperature: 120-140°F (start lower if new to it)</li>
+                        <li>Bring water - hydration is key!</li>
+                        <li>Benefits: reduces inflammation, promotes recovery, relaxation</li>
+                        <li>Post-sauna: drink 16-20 oz water, cool down gradually</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>Recovery is when your body gets stronger! The sauna isn't "cheating" - it's strategic. Use this day to notice how your body feels and appreciate what it can do.</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"Come to me, all you who are weary and burdened, and I will give you rest."</p>
+                    <p class="verse-reference">— Matthew 11:28</p>
+                </div>
+            </div>
+
+            <button class="btn" onclick="markWorkoutComplete(4)">Mark Complete</button>
+        </div>
+
+        <!-- Weekly Reflection -->
+        <div class="card">
+            <h2>📝 Weekly Workout Reflection</h2>
+            <div class="insight-box">
+                <h3>How did this week feel?</h3>
+                <p>After completing your 4 workouts, take a moment to reflect:</p>
+                <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                    <li>Which workout did you enjoy most?</li>
+                    <li>What felt challenging but doable?</li>
+                    <li>Did you notice any changes in energy or mood?</li>
+                    <li>What would you like to adjust next week?</li>
+                </ul>
+                <p style="margin-top: 10px;"><strong>Remember:</strong> You're building a sustainable practice, not training for the Olympics. Progress over perfection! 💜</p>
+            </div>
+        </div>
+        </div>
+
+        <!-- MONTH 2 WORKOUTS -->
+        <div class="month-workouts" id="month2Workouts" style="display: none;">
+            <div class="card">
+                <h2>📅 Month 2 Weekly Plan</h2>
+                <div class="weekly-plan">
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🏃‍♀️</span>
+                            <span>Workout 1: Cardio Progression</span>
+                        </div>
+                        <div class="plan-day-desc">Intervals + increased intensity</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">💪</span>
+                            <span>Workout 2: Upper Body Focus</span>
+                        </div>
+                        <div class="plan-day-desc">Building upper body strength</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🏋️‍♀️</span>
+                            <span>Workout 3: Lower Body & Core</span>
+                        </div>
+                        <div class="plan-day-desc">Leg strength + ab work at gym</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🔥</span>
+                            <span>Workout 4: Active Recovery +</span>
+                        </div>
+                        <div class="plan-day-desc">Cardio + yoga flow + sauna</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>🏃‍♀️ Workout 1: Cardio Progression</h2>
+                    <div class="workout-time">30-35 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Introduce intervals to boost cardiovascular fitness and calorie burn. You're ready for more challenge!</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Warm-up (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Easy walk on treadmill (2.5-3.0 mph)</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Interval Training (20-25 min)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Work Interval:</strong> 2 minutes brisk walk (3.5-4.0 mph) at 3-5% incline</li>
+                            <li><strong>Recovery:</strong> 1 minute easy walk (2.5-3.0 mph) flat</li>
+                            <li>Repeat this pattern 6-8 times</li>
+                            <li>You should feel challenged but able to talk during work intervals</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Cool Down (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Slow walk to bring heart rate down</li>
+                            <li>Standing stretches for legs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>Intervals are where the magic happens! They boost metabolism and improve fitness faster than steady cardio. Start conservative - you can always add intensity next week.</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"I press on toward the goal to win the prize for which God has called me heavenward in Christ Jesus."</p>
+                        <p class="verse-reference">— Philippians 3:14</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('2-1')">Mark Complete</button>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>💪 Workout 2: Upper Body Focus</h2>
+                    <div class="workout-time">35-40 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Build upper body strength and definition. Increase weight from Month 1 by 2-5 lbs where comfortable.</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Warm-up (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Arm circles, shoulder rolls, cat-cow stretches</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Main Workout (3 rounds)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Dumbbell Chest Press</strong> - 12 reps (10-15 lbs, lying on bench)</li>
+                            <li><strong>Bent-Over Rows</strong> - 12 reps each arm (10-15 lbs)</li>
+                            <li><strong>Shoulder Press</strong> - 10 reps (8-12 lbs)</li>
+                            <li><strong>Bicep Curls</strong> - 12 reps (8-12 lbs)</li>
+                            <li><strong>Tricep Overhead Extension</strong> - 12 reps (8-12 lbs, one dumbbell)</li>
+                            <li><strong>Push-ups</strong> - 10-12 reps (knees or toes)</li>
+                            <li><strong>Plank Hold</strong> - 30-45 seconds</li>
+                            <li>Rest 60-90 seconds between rounds</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Finisher</div>
+                        <ul class="exercise-list">
+                            <li><strong>Dumbbell Pullovers</strong> - 15 reps (one 10-15 lb dumbbell, lying on bench)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>Feeling stronger? Great! That's progress. If weights feel too easy, it's time to go heavier. The last 2-3 reps should feel challenging.</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"She is clothed with strength and dignity; she can laugh at the days to come."</p>
+                        <p class="verse-reference">— Proverbs 31:25</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('2-2')">Mark Complete</button>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>🏋️‍♀️ Workout 3: Lower Body & Core</h2>
+                    <div class="workout-time">40-45 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Build strong legs and glutes while strengthening your core. These are your body's powerhouse muscles!</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Warm-up (7 min)</div>
+                        <ul class="exercise-list">
+                            <li>5 min bike or elliptical</li>
+                            <li>Bodyweight squats: 15 reps</li>
+                            <li>Walking lunges: 10 each leg</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Main Workout (3 sets each)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Leg Press</strong> - 15 reps (increase weight from Month 1)</li>
+                            <li><strong>Romanian Deadlifts</strong> - 12 reps (dumbbells or barbell, 15-25 lbs)</li>
+                            <li><strong>Walking Lunges</strong> - 12 each leg (holding 10-15 lb dumbbells)</li>
+                            <li><strong>Leg Curls</strong> - 15 reps</li>
+                            <li><strong>Calf Raises</strong> - 20 reps (holding dumbbells)</li>
+                            <li><strong>Cable Kickbacks</strong> - 15 each leg</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Core Circuit (2 rounds)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Plank</strong> - 45 seconds</li>
+                            <li><strong>Russian Twists</strong> - 20 total (10 each side, holding 10 lb dumbbell)</li>
+                            <li><strong>Dead Bug</strong> - 20 total alternating</li>
+                            <li><strong>Mountain Climbers</strong> - 20 total</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>Leg day is tough but SO rewarding! Your legs are large muscle groups, so working them burns major calories and builds functional strength for daily life.</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"For physical training is of some value, but godliness has value for all things."</p>
+                        <p class="verse-reference">— 1 Timothy 4:8</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('2-3')">Mark Complete</button>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>🔥 Workout 4: Active Recovery Plus</h2>
+                    <div class="workout-time">40-45 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Active recovery with added mobility work. Help your body recover while maintaining movement.</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Light Cardio (15 min)</div>
+                        <ul class="exercise-list">
+                            <li>Easy walk or bike at conversational pace</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Yoga Flow (15 min)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Sun Salutations</strong> - 5 rounds</li>
+                            <li><strong>Warrior II</strong> - Hold 30 seconds each side</li>
+                            <li><strong>Triangle Pose</strong> - Hold 30 seconds each side</li>
+                            <li><strong>Pigeon Pose</strong> - Hold 1 minute each side</li>
+                            <li><strong>Child's Pose</strong> - Hold 1 minute</li>
+                            <li><strong>Seated Forward Fold</strong> - Hold 1 minute</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Infrared Sauna (15-20 min)</div>
+                        <ul class="exercise-list">
+                            <li>Temperature: 130-150°F</li>
+                            <li>Focus on deep breathing and relaxation</li>
+                            <li>Hydrate before and after</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>Adding yoga this month helps with flexibility and mind-body connection. Don't skip recovery - it's when your muscles actually grow stronger!</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul."</p>
+                        <p class="verse-reference">— Psalm 23:2-3</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('2-4')">Mark Complete</button>
+            </div>
+
+            <div class="card">
+                <h2>📝 Month 2 Reflection</h2>
+                <div class="insight-box">
+                    <h3>Progress Check!</h3>
+                    <p>You've been at this for a month now. Notice:</p>
+                    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                        <li>Exercises that felt hard in Month 1 are getting easier</li>
+                        <li>You're lifting heavier weights</li>
+                        <li>Your endurance is improving</li>
+                        <li>You're building strength and confidence</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><strong>Keep going!</strong> The momentum is building. 💜</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTH 3 WORKOUTS -->
+        <div class="month-workouts" id="month3Workouts" style="display: none;">
+            <div class="card">
+                <h2>📅 Month 3 Weekly Plan</h2>
+                <div class="weekly-plan">
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🏃‍♀️</span>
+                            <span>Workout 1: HIIT Cardio</span>
+                        </div>
+                        <div class="plan-day-desc">High-intensity interval training</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">💪</span>
+                            <span>Workout 2: Total Body Power</span>
+                        </div>
+                        <div class="plan-day-desc">Full body strength with supersets</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🏋️‍♀️</span>
+                            <span>Workout 3: Advanced Gym Day</span>
+                        </div>
+                        <div class="plan-day-desc">Progressive overload focus</div>
+                    </div>
+                    <div class="plan-day">
+                        <div class="plan-day-header">
+                            <span class="day-icon">🔥</span>
+                            <span>Workout 4: Endurance & Recovery</span>
+                        </div>
+                        <div class="plan-day-desc">Longer cardio + deep recovery</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>🏃‍♀️ Workout 1: HIIT Cardio</h2>
+                    <div class="workout-time">30-35 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Maximize calorie burn and cardiovascular fitness with shorter, more intense intervals. You're ready for this!</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Warm-up (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Progressive walk building from 2.5 to 3.5 mph</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">HIIT Protocol (20-25 min)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Sprint Interval:</strong> 30-45 seconds fast walk/jog (4.5-6.0 mph) at 5-7% incline</li>
+                            <li><strong>Recovery:</strong> 60-90 seconds easy walk (2.5-3.0 mph) flat</li>
+                            <li>Repeat 8-10 times</li>
+                            <li>Push hard during sprints - you should be breathing heavily</li>
+                            <li>Use recovery time to fully catch your breath</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Cool Down (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Gradual walk down</li>
+                            <li>Deep breathing exercises</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>HIIT is incredibly efficient! These short bursts burn calories for hours after you're done. This is the power of being consistent for 2 months - you're strong enough for this now!</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"Let us run with perseverance the race marked out for us."</p>
+                        <p class="verse-reference">— Hebrews 12:1</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('3-1')">Mark Complete</button>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>💪 Workout 2: Total Body Power</h2>
+                    <div class="workout-time">40-45 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Combine exercises into supersets for efficiency and intensity. Challenge every muscle group!</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Warm-up (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Dynamic stretches + 10 bodyweight squats + 10 push-ups</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Superset 1 (3 rounds)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Goblet Squats</strong> - 15 reps (15-20 lbs)</li>
+                            <li><strong>Push-ups</strong> - 12-15 reps (full or modified)</li>
+                            <li>No rest between exercises, 90 seconds rest after both</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Superset 2 (3 rounds)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Romanian Deadlifts</strong> - 12 reps (15-25 lbs each hand)</li>
+                            <li><strong>Bent-Over Rows</strong> - 12 reps each arm (12-20 lbs)</li>
+                            <li>No rest between exercises, 90 seconds rest after both</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Superset 3 (3 rounds)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Reverse Lunges</strong> - 12 each leg (holding 10-15 lb dumbbells)</li>
+                            <li><strong>Overhead Press</strong> - 12 reps (10-15 lbs each hand)</li>
+                            <li>No rest between exercises, 90 seconds rest after both</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Core Finisher (2 rounds)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Plank to Down Dog</strong> - 15 reps</li>
+                            <li><strong>Bicycle Crunches</strong> - 30 total</li>
+                            <li><strong>Side Plank</strong> - 30 seconds each side</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>Supersets save time and keep your heart rate elevated for extra calorie burn. You're getting efficient AND effective!</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"I can do all this through him who gives me strength."</p>
+                        <p class="verse-reference">— Philippians 4:13</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('3-2')">Mark Complete</button>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>🏋️‍♀️ Workout 3: Advanced Gym Day</h2>
+                    <div class="workout-time">45-50 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Progressive overload - lift heavier than Month 2. This is where real transformation happens!</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Warm-up (7 min)</div>
+                        <ul class="exercise-list">
+                            <li>7 minutes varied cardio + dynamic stretches</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Lower Body (3-4 sets each)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Leg Press</strong> - 12 reps (increase weight from Month 2)</li>
+                            <li><strong>Bulgarian Split Squats</strong> - 10 each leg (holding dumbbells)</li>
+                            <li><strong>Leg Curls</strong> - 15 reps</li>
+                            <li><strong>Hip Thrusts</strong> - 15 reps (add weight with barbell or dumbbell on hips)</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Upper Body (3 sets each)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Chest Press Machine</strong> - 12 reps</li>
+                            <li><strong>Lat Pulldown</strong> - 12 reps</li>
+                            <li><strong>Cable Flies</strong> - 15 reps</li>
+                            <li><strong>Face Pulls</strong> - 15 reps (great for posture!)</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Ab Burnout</div>
+                        <ul class="exercise-list">
+                            <li><strong>Cable Crunches</strong> - 20 reps</li>
+                            <li><strong>Hanging Knee Raises</strong> - 10-15 reps (or use captain's chair)</li>
+                            <li><strong>Plank</strong> - Hold 60 seconds</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>You've earned this level! Your form is solid, your confidence is up, and your body is ready for more challenge. Be proud of how far you've come!</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"Commit to the LORD whatever you do, and he will establish your plans."</p>
+                        <p class="verse-reference">— Proverbs 16:3</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('3-3')">Mark Complete</button>
+            </div>
+
+            <div class="card workout-card">
+                <div class="workout-header">
+                    <h2>🔥 Workout 4: Endurance & Recovery</h2>
+                    <div class="workout-time">50-60 minutes</div>
+                </div>
+                
+                <div class="workout-section">
+                    <h3>💡 Goal</h3>
+                    <p>Build endurance with longer, steady cardio. Deep recovery practices to support all your hard work.</p>
+                </div>
+
+                <div class="workout-section">
+                    <h3>🎯 The Workout</h3>
+                    
+                    <div class="exercise-block">
+                        <div class="exercise-title">Endurance Cardio (25-30 min)</div>
+                        <ul class="exercise-list">
+                            <li>Steady-state walk at moderate pace (3.5-4.0 mph)</li>
+                            <li>Slight incline (2-4%)</li>
+                            <li>OR outdoor walk/hike if weather permits</li>
+                            <li>Should feel sustainable - you could maintain this for an hour</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Full Body Stretch Sequence (10 min)</div>
+                        <ul class="exercise-list">
+                            <li><strong>Downward Dog</strong> - 1 minute</li>
+                            <li><strong>Low Lunge</strong> - 1 minute each side</li>
+                            <li><strong>Pigeon Pose</strong> - 2 minutes each side</li>
+                            <li><strong>Seated Spinal Twist</strong> - 1 minute each side</li>
+                            <li><strong>Reclined Figure-4</strong> - 1 minute each side</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Foam Rolling (5 min)</div>
+                        <ul class="exercise-list">
+                            <li>Quads, hamstrings, calves, IT band, back</li>
+                            <li>Slow, deliberate movements</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-title">Infrared Sauna (20 min)</div>
+                        <ul class="exercise-list">
+                            <li>Temperature: 140-150°F</li>
+                            <li>Meditate, breathe, reflect on your journey</li>
+                            <li>Celebrate your consistency!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workout-tips">
+                    <h4>✨ Kate's Tips</h4>
+                    <p>This longer recovery session honors all the work you've been doing. Your body has adapted, gotten stronger, and deserves this care. Enjoy every minute!</p>
+                </div>
+
+                <div class="bible-verse">
+                    <div class="verse-icon">📖</div>
+                    <div class="verse-content">
+                        <p class="verse-text">"The LORD is my strength and my shield; my heart trusts in him, and he helps me."</p>
+                        <p class="verse-reference">— Psalm 28:7</p>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="markWorkoutComplete('3-4')">Mark Complete</button>
+            </div>
+
+            <div class="card">
+                <h2>🎉 Month 3 Complete!</h2>
+                <div class="insight-box">
+                    <h3>Look at You Now!</h3>
+                    <p>Three months of consistency. Think about where you started:</p>
+                    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                        <li>You've built a sustainable fitness habit</li>
+                        <li>You're lifting weights you couldn't imagine in Month 1</li>
+                        <li>Your cardiovascular fitness has transformed</li>
+                        <li>You understand your body and what it needs</li>
+                        <li>You've proven to yourself what you're capable of</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>What's Next?</strong> Keep going! Repeat Month 3 with heavier weights, or mix and match from all three months based on what you love. You're no longer a beginner - you're an athlete! 💜</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Reflection (moved outside month sections) -->
+    </div>
+
+    <!-- Stretches Page -->
+    <div id="stretchesPage" class="page">
+        <div class="card">
+            <h2>🧘‍♀️ Back Pain Relief Stretches</h2>
+            <p style="color: #666; margin-bottom: 15px;">Gentle stretches to relieve tension and improve mobility. Perfect for daily maintenance or recovery days.</p>
+            
+            <div class="insight-box">
+                <h3>💡 When to Use These</h3>
+                <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8; color: #555;">
+                    <li><strong>Morning:</strong> Wake up tight muscles and prepare for the day</li>
+                    <li><strong>After sitting:</strong> Counter desk work and long periods of sitting</li>
+                    <li><strong>Before bed:</strong> Release tension and improve sleep quality</li>
+                    <li><strong>Post-workout:</strong> Aid recovery and prevent soreness</li>
+                    <li><strong>During pain flare-ups:</strong> Gentle relief when back feels tight</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Stretch 1: Pigeon Pose -->
+        <div class="card workout-card">
+            <div class="workout-header">
+                <h2>🧘‍♀️ Pigeon Pose</h2>
+                <div class="workout-time">1-2 min hold each side</div>
+            </div>
+
+            <div class="workout-section">
+                <h3>💡 Benefits</h3>
+                <p>Opens hips, releases lower back tension, stretches piriformis muscle (major cause of lower back pain).</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 How To Do It</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Setup</div>
+                    <ul class="exercise-list">
+                        <li>Begin on all fours (hands and knees)</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Movement</div>
+                    <ul class="exercise-list">
+                        <li>Bring one knee up towards your arms and rest the outside of that leg on the ground</li>
+                        <li>Extend your other leg straight behind you</li>
+                        <li>Bring your trunk forward with arms straight on the ground until you feel a stretch</li>
+                        <li>Hold for 1-2 minutes, breathing deeply</li>
+                        <li>Repeat on the other side</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Tips</div>
+                    <ul class="exercise-list">
+                        <li>Perform this exercise slowly and keep your back straight</li>
+                        <li>Don't force the stretch - go only as far as comfortable</li>
+                        <li>Focus on deep, relaxed breathing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>This is one of the BEST hip openers. Tight hips are often the root cause of lower back pain. Do this daily if possible!</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"Be still, and know that I am God."</p>
+                    <p class="verse-reference">— Psalm 46:10</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stretch 2: Thoracic Rotation -->
+        <div class="card workout-card">
+            <div class="workout-header">
+                <h2>🔄 Sidelying Open Book Thoracic Rotation</h2>
+                <div class="workout-time">10 reps each side</div>
+            </div>
+
+            <div class="workout-section">
+                <h3>💡 Benefits</h3>
+                <p>Improves mid-back mobility, opens chest and shoulders, relieves upper back stiffness from sitting.</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 How To Do It</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Setup</div>
+                    <ul class="exercise-list">
+                        <li>Lie on your side with bottom leg straight</li>
+                        <li>Top leg bent at 90 degrees, resting on a foam roll or rolled towel</li>
+                        <li>Arms straight and together in front of you on the ground</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Movement</div>
+                    <ul class="exercise-list">
+                        <li>Slowly move your top arm away from your other arm</li>
+                        <li>Bring it to the floor behind you, rotating your upper trunk</li>
+                        <li>Follow your hand with your eyes</li>
+                        <li>Next, bring your arms back together and repeat</li>
+                        <li>Do 10 reps, then switch sides</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Tips</div>
+                    <ul class="exercise-list">
+                        <li>Move slowly and with control</li>
+                        <li>Keep your bent knee stable on the foam roll</li>
+                        <li>Focus on rotating from your mid-back, not your lower back</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>This one feels SO good after being hunched over a computer or phone. Your thoracic spine (mid-back) needs rotation to stay healthy!</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"The LORD gives strength to his people; the LORD blesses his people with peace."</p>
+                    <p class="verse-reference">— Psalm 29:11</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stretch 3: Double Knee to Chest -->
+        <div class="card workout-card">
+            <div class="workout-header">
+                <h2>🤗 Supine Double Knee to Chest</h2>
+                <div class="workout-time">10 reps, hold 2-3 seconds</div>
+            </div>
+
+            <div class="workout-section">
+                <h3>💡 Benefits</h3>
+                <p>Gently stretches lower back, relieves pressure on spine, calms nervous system.</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 How To Do It</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Setup</div>
+                    <ul class="exercise-list">
+                        <li>Lie on your back with knees bent and feet flat on the floor</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Movement</div>
+                    <ul class="exercise-list">
+                        <li>Using your hands, slowly pull your knees toward your chest</li>
+                        <li>Stop when you feel a gentle stretch in your lower back</li>
+                        <li>Hold for 2-3 seconds</li>
+                        <li>Slowly lower back to starting position</li>
+                        <li>Repeat 10 times</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Tips</div>
+                    <ul class="exercise-list">
+                        <li>Keep your back relaxed during the stretch</li>
+                        <li>Don't pull too hard - gentle is the goal</li>
+                        <li>Breathe naturally throughout</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>This is the gentlest back stretch - perfect for when your back is really tight or painful. It's also calming before bed!</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"Cast all your anxiety on him because he cares for you."</p>
+                    <p class="verse-reference">— 1 Peter 5:7</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stretch 4: Half Kneel Psoas Stretch -->
+        <div class="card workout-card">
+            <div class="workout-header">
+                <h2>🦵 Half Kneel Psoas Stretch</h2>
+                <div class="workout-time">5-10 sec holds, 6-10 reps each side</div>
+            </div>
+
+            <div class="workout-section">
+                <h3>💡 Benefits</h3>
+                <p>Stretches hip flexors (psoas muscle), relieves lower back tension from sitting, improves posture.</p>
+            </div>
+
+            <div class="workout-section">
+                <h3>🎯 How To Do It</h3>
+                
+                <div class="exercise-block">
+                    <div class="exercise-title">Setup</div>
+                    <ul class="exercise-list">
+                        <li>Begin in half kneel position on your right knee</li>
+                        <li>Left foot forward and flat on the ground</li>
+                        <li>Place a pillow under your knee for comfort if needed</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Movement</div>
+                    <ul class="exercise-list">
+                        <li>Tuck your pelvis under and transfer weight forward onto the left foot</li>
+                        <li>Reach your right arm up overhead and slightly to the left</li>
+                        <li>You should feel a stretch in the front of your right hip and thigh</li>
+                        <li>This should NOT cause back pain</li>
+                        <li>Hold 5-10 seconds</li>
+                        <li>Do 6-10 reps, then repeat on opposite side</li>
+                    </ul>
+                </div>
+
+                <div class="exercise-block">
+                    <div class="exercise-title">Tips</div>
+                    <ul class="exercise-list">
+                        <li>Keep your core engaged - don't let your back arch</li>
+                        <li>The stretch should be felt in the front hip, not the back</li>
+                        <li>Great to do after sitting all day!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="workout-tips">
+                <h4>✨ Kate's Tips</h4>
+                <p>Tight hip flexors are a HUGE cause of lower back pain, especially if you sit a lot. This stretch is a game-changer! Do it every day.</p>
+            </div>
+
+            <div class="bible-verse">
+                <div class="verse-icon">📖</div>
+                <div class="verse-content">
+                    <p class="verse-text">"My flesh and my heart may fail, but God is the strength of my heart and my portion forever."</p>
+                    <p class="verse-reference">— Psalm 73:26</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stretching Protocol Card -->
+        <div class="card">
+            <div class="insight-box">
+                <h3>📋 Daily Stretching Protocol</h3>
+                <p style="margin-bottom: 15px;">For best results, follow this routine:</p>
+                
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">Morning (5-10 minutes):</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.95em;">Half Kneel Psoas Stretch → Thoracic Rotation → Double Knee to Chest</p>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">After Sitting (3-5 minutes):</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.95em;">Half Kneel Psoas Stretch → Thoracic Rotation</p>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #667eea;">Evening (10-15 minutes):</strong>
+                    <p style="margin: 5px 0 0 0; font-size: 0.95em;">All four stretches, holding longer for deep relaxation</p>
+                </div>
+
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #e8eaf6;">
+                    <strong style="color: #667eea;">Remember:</strong>
+                    <ul style="margin: 8px 0 0 20px; font-size: 0.95em; line-height: 1.7;">
+                        <li>Never force a stretch</li>
+                        <li>Breathe deeply and relax into each position</li>
+                        <li>Consistency matters more than duration</li>
+                        <li>If pain worsens, stop and consult a healthcare provider</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Page -->
+    <div id="progressPage" class="page">
+        <div class="card">
+            <h2>📊 Your Progress</h2>
+            
+            <!-- Summary Metrics -->
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="weightChange">--</div>
+                    <div class="metric-label">Weight Change (lbs)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="avgEnergy">--</div>
+                    <div class="metric-label">Avg Energy</div>
+                </div>
+            </div>
+
+            <!-- Chart Tabs -->
+            <div class="tabs" style="margin-top: 20px;">
+                <div class="tab active" onclick="switchChart('weight')">Weight</div>
+                <div class="tab" onclick="switchChart('energy')">Energy</div>
+            </div>
+
+            <!-- Weight Chart -->
+            <div id="weightChartTab" class="tab-content active">
+                <div class="chart-container">
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Energy Chart -->
+            <div id="energyChartTab" class="tab-content">
+                <div class="chart-container">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Photos Page -->
+    <div id="photosPage" class="page">
+        <div class="card">
+            <h2>📸 Progress Photos</h2>
+            <p style="color: #666; margin-bottom: 20px;">Track your visual progress over time. Photos tell the story that the scale can't!</p>
+            
+            <div class="photo-upload-section">
+                <input type="file" id="photoInput" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(event)">
+                <button class="btn" onclick="document.getElementById('photoInput').click()">
+                    📷 Add Progress Photo
+                </button>
+            </div>
+        </div>
+
+        <div class="card" id="photoGalleryCard">
+            <h2>Your Journey</h2>
+            <div id="photoGallery" class="photo-gallery">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📷</div>
+                    <p>No photos yet. Start documenting your journey!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="insight-box">
+                <h3>💡 Photo Tips</h3>
+                <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8; color: #555;">
+                    <li><strong>Consistency is key:</strong> Take photos in the same spot, same lighting, same time of day</li>
+                    <li><strong>Weekly works best:</strong> Take photos once a week (same day each week)</li>
+                    <li><strong>Wear similar clothing:</strong> Same outfit helps you see changes clearly</li>
+                    <li><strong>Multiple angles:</strong> Front, side, and back give the full picture</li>
+                    <li><strong>Be patient:</strong> Changes take time - compare photos 4-6 weeks apart</li>
+                    <li><strong>Celebrate non-scale victories:</strong> Notice improved posture, muscle definition, how clothes fit</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Page -->
+    <div id="historyPage" class="page">
+        <div class="card">
+            <h2>📅 Check-in History</h2>
+            <div id="historyList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPage('home')">
+        <span class="nav-icon">🏠</span>
+        Home
+    </div>
+    <div class="nav-item" onclick="switchPage('workouts')">
+        <span class="nav-icon">💪</span>
+        Workouts
+    </div>
+    <div class="nav-item" onclick="switchPage('stretches')">
+        <span class="nav-icon">🧘‍♀️</span>
+        Stretches
+    </div>
+    <div class="nav-item" onclick="switchPage('progress')">
+        <span class="nav-icon">📊</span>
+        Progress
+    </div>
+    <div class="nav-item" onclick="switchPage('photos')">
+        <span class="nav-icon">📸</span>
+        Photos
+    </div>
+    <div class="nav-item" onclick="switchPage('history')">
+        <span class="nav-icon">📅</span>
+        History
+    </div>
+</div>
+
+<script>
+    let weightChart = null;
+    let energyChart = null;
+
+    // Initialize app
+    async function initApp() {
+        await loadData();
+        updateStreaks();
+        updateCharts();
+        updateHistory();
+        checkTodayCheckin();
+        updateWorkoutProgress();
+        checkSupplementStatus();
+        loadPhotos();
+        
+        // Show Month 1 workouts by default
+        document.getElementById('month1Workouts').classList.add('active');
+    }
+
+    // Switch between months
+    function switchMonth(monthNumber) {
+        // Hide all month workouts
+        document.querySelectorAll('.month-workouts').forEach(m => m.classList.remove('active'));
+        
+        // Show selected month
+        document.getElementById(`month${monthNumber}Workouts`).classList.add('active');
+        
+        // Update tab styling
+        const tabs = document.querySelectorAll('#workoutsPage .tabs .tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        tabs[monthNumber - 1].classList.add('active');
+        
+        // Update description
+        const descriptions = {
+            1: {
+                title: 'Month 1: Foundation Building',
+                desc: 'Focus on learning proper form, building base fitness, and establishing the habit. Light weights, manageable intensity.'
+            },
+            2: {
+                title: 'Month 2: Progressive Challenge',
+                desc: 'Increase intensity with intervals, heavier weights, and split routines. Your body is adapting - time to push a bit more!'
+            },
+            3: {
+                title: 'Month 3: Advanced Training',
+                desc: 'HIIT, supersets, and progressive overload. You\'re strong, confident, and ready for the next level. Embrace the challenge!'
+            }
+        };
+        
+        const desc = descriptions[monthNumber];
+        document.getElementById('monthDescription').innerHTML = `
+            <strong style="color: #667eea;">${desc.title}</strong>
+            <p style="margin: 5px 0 0 0; color: #666;">${desc.desc}</p>
+        `;
+    }
+
+    // Handle photo upload
+    async function handlePhotoUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Check file size (limit to 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Photo is too large. Please choose a photo under 5MB.');
+            return;
+        }
+
+        try {
+            // Convert to base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Image = e.target.result;
+                
+                // Get existing photos
+                let photos = [];
+                try {
+                    const result = await window.storage.get('healthy-kate-photos');
+                    if (result && result.value) {
+                        photos = JSON.parse(result.value);
+                    }
+                } catch (error) {
+                    console.log('No existing photos');
+                }
+
+                // Add new photo
+                const newPhoto = {
+                    id: Date.now().toString(),
+                    date: new Date().toISOString().split('T')[0],
+                    timestamp: new Date().toISOString(),
+                    image: base64Image
+                };
+
+                photos.unshift(newPhoto); // Add to beginning
+
+                // Limit to 50 photos to manage storage
+                if (photos.length > 50) {
+                    photos = photos.slice(0, 50);
+                }
+
+                // Save
+                await window.storage.set('healthy-kate-photos', JSON.stringify(photos));
+
+                // Reload gallery
+                loadPhotos();
+
+                // Show success
+                alert('📸 Photo added successfully!');
+            };
+            reader.readAsDataURL(file);
+
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            alert('There was an error uploading your photo. Please try again.');
+        }
+
+        // Clear input
+        event.target.value = '';
+    }
+
+    // Load and display photos
+    async function loadPhotos() {
+        try {
+            const result = await window.storage.get('healthy-kate-photos');
+            let photos = [];
+            
+            if (result && result.value) {
+                photos = JSON.parse(result.value);
+            }
+
+            const gallery = document.getElementById('photoGallery');
+
+            if (photos.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📷</div>
+                        <p>No photos yet. Start documenting your journey!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Display photos
+            gallery.innerHTML = photos.map(photo => {
+                const date = new Date(photo.date);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                return `
+                    <div class="photo-item">
+                        <img src="${photo.image}" alt="Progress photo from ${formattedDate}">
+                        <div class="photo-date">${formattedDate}</div>
+                        <button class="photo-delete" onclick="deletePhoto('${photo.id}')">×</button>
+                    </div>
+                `;
+            }).join('');
+
+            // Add comparison section if there are 2+ photos
+            if (photos.length >= 2) {
+                const comparisonHTML = `
+                    <div class="photo-comparison">
+                        <h3 style="color: #667eea; margin-bottom: 10px;">Compare Your Progress</h3>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <img src="${photos[photos.length - 1].image}" alt="Starting photo">
+                                <div class="comparison-label">Starting</div>
+                                <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
+                                    ${new Date(photos[photos.length - 1].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                </div>
+                            </div>
+                            <div class="comparison-item">
+                                <img src="${photos[0].image}" alt="Current photo">
+                                <div class="comparison-label">Current</div>
+                                <div style="font-size: 0.85em; color: #666; margin-top: 5px;">
+                                    ${new Date(photos[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px; color: #667eea; font-weight: 600;">
+                            ${Math.abs((new Date(photos[0].date) - new Date(photos[photos.length - 1].date)) / (1000 * 60 * 60 * 24)).toFixed(0)} days of progress!
+                        </div>
+                    </div>
+                `;
+                gallery.innerHTML += comparisonHTML;
+            }
+
+        } catch (error) {
+            console.error('Error loading photos:', error);
+        }
+    }
+
+    // Delete photo
+    async function deletePhoto(photoId) {
+        if (!confirm('Are you sure you want to delete this photo?')) {
+            return;
+        }
+
+        try {
+            const result = await window.storage.get('healthy-kate-photos');
+            let photos = [];
+            
+            if (result && result.value) {
+                photos = JSON.parse(result.value);
+            }
+
+            // Remove photo
+            photos = photos.filter(p => p.id !== photoId);
+
+            // Save
+            await window.storage.set('healthy-kate-photos', JSON.stringify(photos));
+
+            // Reload gallery
+            loadPhotos();
+
+        } catch (error) {
+            console.error('Error deleting photo:', error);
+            alert('There was an error deleting the photo. Please try again.');
+        }
+    }
+
+    // Toggle supplement check
+    async function toggleSupplementCheck() {
+        const today = new Date().toISOString().split('T')[0];
+        
+        try {
+            // Get existing supplement data
+            let supplementData = [];
+            try {
+                const result = await window.storage.get('healthy-kate-supplements');
+                if (result && result.value) {
+                    supplementData = JSON.parse(result.value);
+                }
+            } catch (error) {
+                console.log('No existing supplement data');
+            }
+
+            // Check if already checked today
+            const todayIndex = supplementData.findIndex(s => s.date === today);
+            
+            if (todayIndex >= 0) {
+                // Uncheck
+                supplementData.splice(todayIndex, 1);
+            } else {
+                // Check
+                supplementData.push({
+                    date: today,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Save updated data
+            await window.storage.set('healthy-kate-supplements', JSON.stringify(supplementData));
+
+            // Update UI
+            checkSupplementStatus();
+
+        } catch (error) {
+            console.error('Error toggling supplement:', error);
+        }
+    }
+
+    // Check supplement status for today
+    async function checkSupplementStatus() {
+        const today = new Date().toISOString().split('T')[0];
+        
+        try {
+            const result = await window.storage.get('healthy-kate-supplements');
+            let supplementData = [];
+            
+            if (result && result.value) {
+                supplementData = JSON.parse(result.value);
+            }
+
+            const checkedToday = supplementData.some(s => s.date === today);
+            
+            // Update UI
+            const checkmark = document.getElementById('supplementCheckmark');
+            const reminderCard = document.querySelector('.supplement-reminder');
+            
+            if (checkedToday) {
+                checkmark.textContent = '✓';
+                reminderCard.classList.add('checked');
+            } else {
+                checkmark.textContent = '☐';
+                reminderCard.classList.remove('checked');
+            }
+
+        } catch (error) {
+            console.log('Error checking supplement status:', error);
+        }
+    }
+
+    // Load data from storage
+    async function loadData() {
+        try {
+            const result = await window.storage.get('healthy-kate-checkins');
+            if (result && result.value) {
+                return JSON.parse(result.value);
+            }
+        } catch (error) {
+            console.log('No existing data found, starting fresh');
+        }
+        return [];
+    }
+
+    // Save data to storage
+    async function saveData(data) {
+        try {
+            await window.storage.set('healthy-kate-checkins', JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error('Error saving data:', error);
+            alert('There was an error saving your data. Please try again.');
+            return false;
+        }
+    }
+
+    // Save check-in
+    async function saveCheckin() {
+        const weight = document.getElementById('weightInput').value;
+        const factorMeals = document.getElementById('factorMealsInput').value;
+        const calories = document.getElementById('caloriesInput').value;
+        const protein = document.getElementById('proteinInput').value;
+        const carbs = document.getElementById('carbsInput').value;
+        const fat = document.getElementById('fatInput').value;
+        const nutrition = document.getElementById('nutritionInput').value;
+        const exercise = document.getElementById('exerciseInput').value;
+        const energy = document.getElementById('energyInput').value;
+        const notes = document.getElementById('notesInput').value;
+
+        if (!weight && !factorMeals && !calories && !protein && !carbs && !fat && !nutrition && !exercise && !energy && !notes) {
+            alert('Please fill in at least one field');
+            return;
+        }
+
+        const checkin = {
+            date: new Date().toISOString().split('T')[0],
+            timestamp: new Date().toISOString(),
+            weight: weight ? parseFloat(weight) : null,
+            factorMeals: factorMeals ? parseInt(factorMeals) : 0,
+            calories: calories ? parseInt(calories) : null,
+            protein: protein ? parseInt(protein) : null,
+            carbs: carbs ? parseInt(carbs) : null,
+            fat: fat ? parseInt(fat) : null,
+            nutrition: nutrition,
+            exercise: exercise,
+            energy: energy ? parseInt(energy) : null,
+            notes: notes
+        };
+
+        const data = await loadData();
+        
+        // Check if there's already a check-in for today
+        const todayIndex = data.findIndex(c => c.date === checkin.date);
+        if (todayIndex >= 0) {
+            data[todayIndex] = checkin;
+        } else {
+            data.push(checkin);
+        }
+
+        // Sort by date descending
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const saved = await saveData(data);
+        
+        if (saved) {
+            // Clear form
+            document.getElementById('weightInput').value = '';
+            document.getElementById('factorMealsInput').value = '';
+            document.getElementById('caloriesInput').value = '';
+            document.getElementById('proteinInput').value = '';
+            document.getElementById('carbsInput').value = '';
+            document.getElementById('fatInput').value = '';
+            document.getElementById('nutritionInput').value = '';
+            document.getElementById('exerciseInput').value = '';
+            document.getElementById('energyInput').value = '';
+            document.getElementById('notesInput').value = '';
+
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+
+            // Generate and show insight
+            generateInsight(checkin, data);
+
+            // Update UI
+            updateStreaks();
+            updateCharts();
+            updateHistory();
+        }
+    }
+
+    // Generate personalized insight
+    function generateInsight(checkin, allData) {
+        const insights = [];
+
+        // Macro insights
+        if (checkin.calories || checkin.protein || checkin.carbs || checkin.fat) {
+            let macroFeedback = [];
+            
+            // Calories
+            if (checkin.calories) {
+                if (checkin.calories >= 1600 && checkin.calories <= 1700) {
+                    macroFeedback.push("Perfect calorie range! 🎯");
+                } else if (checkin.calories < 1600) {
+                    macroFeedback.push("Calories are a bit low - make sure you're fueling your body adequately.");
+                } else if (checkin.calories > 1700 && checkin.calories < 1900) {
+                    macroFeedback.push("Slightly over target, but one day won't derail you. Back on track tomorrow!");
+                }
+            }
+
+            // Protein
+            if (checkin.protein) {
+                if (checkin.protein >= 120) {
+                    macroFeedback.push("Excellent protein intake! This supports muscle building and keeps you satisfied. 💪");
+                } else if (checkin.protein < 100) {
+                    macroFeedback.push("Try to boost your protein - it's key for maintaining muscle while losing fat.");
+                }
+            }
+
+            if (macroFeedback.length > 0) {
+                insights.push(macroFeedback.join(' '));
+            }
+        }
+
+        // Factor meals insights
+        if (checkin.factorMeals > 0) {
+            const weeklyFactorMeals = getWeeklyFactorMeals(allData);
+            if (weeklyFactorMeals >= 14) {
+                insights.push(`🎯 Amazing! You hit your 14 Factor meals this week! You're making nutrition so much easier on yourself. That's smart and sustainable! 🍽️`);
+            } else if (weeklyFactorMeals >= 10) {
+                insights.push(`You're ${14 - weeklyFactorMeals} Factor meals away from your weekly goal! You're doing great with consistency. Keep it up! 💪`);
+            } else if (checkin.factorMeals >= 2) {
+                insights.push(`Love that you had ${checkin.factorMeals} Factor meals today! Taking the stress out of meal planning helps you stay on track. 🌟`);
+            }
+        }
+
+        // Weight insights
+        if (checkin.weight && allData.length > 1) {
+            const previousWeights = allData.slice(1).filter(c => c.weight).map(c => c.weight);
+            if (previousWeights.length > 0) {
+                const lastWeight = previousWeights[0];
+                const change = checkin.weight - lastWeight;
+                const remaining = checkin.weight - 145;
+                if (change < 0) {
+                    insights.push(`Great progress! You're down ${Math.abs(change).toFixed(1)} lbs from your last check-in. ${remaining > 0 ? `Only ${remaining.toFixed(1)} lbs to your goal of 145!` : 'You reached your goal! 🎉'} Keep up the amazing work!`);
+                } else if (change > 0) {
+                    insights.push(`Weight fluctuations are normal and don't define your progress. Focus on how you feel and the healthy habits you're building. 💪`);
+                } else {
+                    insights.push(`Consistency is key! Maintaining your weight shows stability. Keep focusing on your nutrition and exercise. 🌟`);
+                }
+            }
+        }
+
+        // Energy insights
+        if (checkin.energy) {
+            if (checkin.energy >= 8) {
+                insights.push(`Your energy is fantastic today! High energy often reflects good nutrition and rest. You're doing something right! ⚡`);
+            } else if (checkin.energy <= 4) {
+                insights.push(`Energy feeling low? Make sure you're getting enough sleep, staying hydrated, and hitting your protein target. Be kind to yourself today. 🌙`);
+            }
+        }
+
+        // Exercise insights
+        if (checkin.exercise && checkin.exercise.length > 10) {
+            insights.push(`Love seeing your commitment to movement! Every workout is an investment in your health and happiness. 🏃‍♀️`);
+        }
+
+        // Streak insights
+        const streak = calculateStreak(allData);
+        if (streak > 0 && streak % 7 === 0) {
+            insights.push(`🔥 ${streak} days in a row! You're building incredible consistency. This is how lasting change happens!`);
+        }
+
+        // Default encouraging message
+        if (insights.length === 0) {
+            const encouragements = [
+                "Every check-in is a step forward. You're investing in yourself, and that's beautiful! 🌸",
+                "Progress isn't always linear, but showing up consistently is what matters most. Proud of you! 💜",
+                "Remember: health is a journey, not a destination. You're exactly where you need to be. ✨",
+                "Small daily improvements lead to stunning results over time. Keep going! 🌱"
+            ];
+            insights.push(encouragements[Math.floor(Math.random() * encouragements.length)]);
+        }
+
+        // Display insight
+        document.getElementById('insightText').innerHTML = insights.join('<br><br>');
+        document.getElementById('insightCard').style.display = 'block';
+    }
+
+    // Calculate current streak
+    function calculateStreak(data) {
+        if (data.length === 0) return 0;
+
+        let streak = 0;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (let i = 0; i < data.length; i++) {
+            const checkinDate = new Date(data[i].date);
+            checkinDate.setHours(0, 0, 0, 0);
+            
+            const expectedDate = new Date(today);
+            expectedDate.setDate(expectedDate.getDate() - i);
+            expectedDate.setHours(0, 0, 0, 0);
+
+            if (checkinDate.getTime() === expectedDate.getTime()) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+
+        return streak;
+    }
+
+    // Calculate weekly Factor meals
+    function getWeeklyFactorMeals(data) {
+        const today = new Date();
+        const weekAgo = new Date(today);
+        weekAgo.setDate(weekAgo.getDate() - 7);
+
+        return data
+            .filter(c => {
+                const checkinDate = new Date(c.date);
+                return checkinDate >= weekAgo && checkinDate <= today;
+            })
+            .reduce((sum, c) => sum + (c.factorMeals || 0), 0);
+    }
+
+    // Update streak display
+    async function updateStreaks() {
+        const data = await loadData();
+        const streak = calculateStreak(data);
+        const weeklyFactorMeals = getWeeklyFactorMeals(data);
+        
+        document.getElementById('currentStreak').textContent = streak;
+        document.getElementById('totalCheckins').textContent = data.length;
+        document.getElementById('factorMealsWeek').textContent = `${weeklyFactorMeals}/14`;
+        document.getElementById('factorWeeklyCount').textContent = weeklyFactorMeals;
+    }
+
+    // Update charts
+    async function updateCharts() {
+        const data = await loadData();
+        
+        if (data.length === 0) return;
+
+        // Prepare data (most recent last for charts)
+        const reversedData = [...data].reverse();
+        const dates = reversedData.map(c => {
+            const date = new Date(c.date);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+
+        // Weight chart
+        const weights = reversedData.map(c => c.weight).filter(w => w !== null);
+        const weightDates = reversedData.filter(c => c.weight).map(c => {
+            const date = new Date(c.date);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+
+        if (weights.length > 0) {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            if (weightChart) weightChart.destroy();
+            
+            weightChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: weightDates,
+                    datasets: [{
+                        label: 'Weight (lbs)',
+                        data: weights,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+
+            // Update weight change metric
+            if (weights.length > 1) {
+                const change = weights[weights.length - 1] - weights[0];
+                document.getElementById('weightChange').textContent = (change > 0 ? '+' : '') + change.toFixed(1);
+            }
+        }
+
+        // Energy chart
+        const energyLevels = reversedData.map(c => c.energy).filter(e => e !== null);
+        const energyDates = reversedData.filter(c => c.energy).map(c => {
+            const date = new Date(c.date);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+
+        if (energyLevels.length > 0) {
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            if (energyChart) energyChart.destroy();
+            
+            energyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: energyDates,
+                    datasets: [{
+                        label: 'Energy Level',
+                        data: energyLevels,
+                        borderColor: '#764ba2',
+                        backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            // Update average energy metric
+            const avgEnergy = energyLevels.reduce((a, b) => a + b, 0) / energyLevels.length;
+            document.getElementById('avgEnergy').textContent = avgEnergy.toFixed(1);
+        }
+    }
+
+    // Update history list
+    async function updateHistory() {
+        const data = await loadData();
+        const historyList = document.getElementById('historyList');
+
+        if (data.length === 0) {
+            historyList.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <p>No check-ins yet. Start tracking to see your history!</p>
+                </div>
+            `;
+            return;
+        }
+
+        historyList.innerHTML = data.map(checkin => {
+            const date = new Date(checkin.date);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            let details = [];
+            if (checkin.weight) details.push(`Weight: ${checkin.weight} lbs`);
+            if (checkin.factorMeals) details.push(`🍽️ ${checkin.factorMeals} Factor meals`);
+            if (checkin.energy) details.push(`Energy: ${checkin.energy}/10`);
+            if (checkin.exercise) details.push(`Exercise: ${checkin.exercise.substring(0, 50)}${checkin.exercise.length > 50 ? '...' : ''}`);
+            if (checkin.nutrition) details.push(`Nutrition: ${checkin.nutrition.substring(0, 50)}${checkin.nutrition.length > 50 ? '...' : ''}`);
+
+            return `
+                <div class="history-item">
+                    <div class="date">${formattedDate}</div>
+                    <div class="data">${details.join(' • ')}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Check if there's already a check-in today
+    async function checkTodayCheckin() {
+        const data = await loadData();
+        const today = new Date().toISOString().split('T')[0];
+        const todayCheckin = data.find(c => c.date === today);
+
+        if (todayCheckin) {
+            // Pre-fill form with today's data
+            if (todayCheckin.weight) document.getElementById('weightInput').value = todayCheckin.weight;
+            if (todayCheckin.factorMeals) document.getElementById('factorMealsInput').value = todayCheckin.factorMeals;
+            if (todayCheckin.calories) document.getElementById('caloriesInput').value = todayCheckin.calories;
+            if (todayCheckin.protein) document.getElementById('proteinInput').value = todayCheckin.protein;
+            if (todayCheckin.carbs) document.getElementById('carbsInput').value = todayCheckin.carbs;
+            if (todayCheckin.fat) document.getElementById('fatInput').value = todayCheckin.fat;
+            if (todayCheckin.nutrition) document.getElementById('nutritionInput').value = todayCheckin.nutrition;
+            if (todayCheckin.exercise) document.getElementById('exerciseInput').value = todayCheckin.exercise;
+            if (todayCheckin.energy) document.getElementById('energyInput').value = todayCheckin.energy;
+            if (todayCheckin.notes) document.getElementById('notesInput').value = todayCheckin.notes;
+
+            // Show insight for today's check-in
+            generateInsight(todayCheckin, data);
+        }
+    }
+
+    // Switch between pages
+    function switchPage(page) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        // Show selected page
+        document.getElementById(page + 'Page').classList.add('active');
+
+        // Update nav
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        // Refresh charts when switching to progress
+        if (page === 'progress') {
+            updateCharts();
+        }
+
+        // Refresh workout progress when switching to workouts
+        if (page === 'workouts') {
+            updateWorkoutProgress();
+        }
+
+        // Refresh photos when switching to photos
+        if (page === 'photos') {
+            loadPhotos();
+        }
+    }
+
+    // Switch between chart tabs
+    function switchChart(chart) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+        event.currentTarget.classList.add('active');
+        document.getElementById(chart + 'ChartTab').classList.add('active');
+    }
+
+    // Initialize app when page loads
+    window.addEventListener('load', initApp);
+
+    // Mark workout as complete
+    async function markWorkoutComplete(workoutNumber) {
+        const today = new Date().toISOString().split('T')[0];
+        
+        try {
+            // Get existing workout data
+            let workoutData = [];
+            try {
+                const result = await window.storage.get('healthy-kate-workouts');
+                if (result && result.value) {
+                    workoutData = JSON.parse(result.value);
+                }
+            } catch (error) {
+                console.log('No existing workout data');
+            }
+
+            // Check if this workout was already completed today
+            const alreadyCompleted = workoutData.some(w => 
+                w.date === today && w.workoutNumber === workoutNumber
+            );
+
+            if (alreadyCompleted) {
+                alert('You already completed this workout today! Great job! 💪');
+                return;
+            }
+
+            // Add new workout completion
+            workoutData.push({
+                date: today,
+                timestamp: new Date().toISOString(),
+                workoutNumber: workoutNumber,
+                workoutName: getWorkoutName(workoutNumber)
+            });
+
+            // Save updated data
+            await window.storage.set('healthy-kate-workouts', JSON.stringify(workoutData));
+
+            // Show success
+            alert(`🎉 Workout ${workoutNumber} completed! Way to go, Kate!`);
+
+            // Update workout display
+            updateWorkoutProgress();
+
+            // Mark the workout card as completed
+            const workoutCard = document.getElementById(`workout${workoutNumber}`);
+            workoutCard.classList.add('workout-completed');
+            workoutCard.querySelector('.btn').textContent = '✓ Completed Today';
+
+        } catch (error) {
+            console.error('Error saving workout:', error);
+            alert('There was an error saving your workout. Please try again.');
+        }
+    }
+
+    function getWorkoutName(number) {
+        const names = {
+            1: 'Cardio Foundation',
+            2: 'Total Body Strength',
+            3: 'Gym Day',
+            4: 'Active Recovery'
+        };
+        return names[number] || 'Workout';
+    }
+
+    // Update workout progress display
+    async function updateWorkoutProgress() {
+        try {
+            const result = await window.storage.get('healthy-kate-workouts');
+            let workoutData = [];
+            
+            if (result && result.value) {
+                workoutData = JSON.parse(result.value);
+            }
+
+            // Get workouts from this week
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            const thisWeekWorkouts = workoutData.filter(w => {
+                const workoutDate = new Date(w.date);
+                return workoutDate >= weekAgo;
+            });
+
+            const workoutCount = thisWeekWorkouts.length;
+
+            // Update progress bar
+            const progressFill = document.getElementById('weekProgressFill');
+            const progressPercent = (workoutCount / 4) * 100;
+            if (progressFill) {
+                progressFill.style.width = progressPercent + '%';
+            }
+
+            // Update counter
+            const counter = document.getElementById('workoutsThisWeek');
+            if (counter) {
+                counter.textContent = workoutCount;
+            }
+
+            // Check which workouts were completed today
+            const today = new Date().toISOString().split('T')[0];
+            const todayWorkouts = workoutData.filter(w => w.date === today);
+
+            // Update workout card states
+            for (let i = 1; i <= 4; i++) {
+                const workoutCard = document.getElementById(`workout${i}`);
+                if (workoutCard) {
+                    const completedToday = todayWorkouts.some(w => w.workoutNumber === i);
+                    if (completedToday) {
+                        workoutCard.classList.add('workout-completed');
+                        workoutCard.querySelector('.btn').textContent = '✓ Completed Today';
+                    } else {
+                        workoutCard.classList.remove('workout-completed');
+                        workoutCard.querySelector('.btn').textContent = 'Mark Complete';
+                    }
+                }
+            }
+
+        } catch (error) {
+            console.log('Error loading workout progress:', error);
+        }
+    }
+</script>
+```
+
+</body>
+</html>
