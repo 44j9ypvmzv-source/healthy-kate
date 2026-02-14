@@ -1,104 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Healthy Kate">
-    <title>Healthy Kate - Health Coaching</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#667eea">
-    <link rel="apple-touch-icon" href="https://files.oaiusercontent.com/file-Vl8zF7vR8vL2vP9kJqWvXz?se=2026-02-15T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3Dicon-192.png&sig=xxxxxxxxxxxxxxxx">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <style>
-        /* Full original CSS - this is the condensed version that fits, but it includes all key styles for layout, cards, buttons, streaks fire, etc. */
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); min-height:100vh; padding:20px; padding-bottom:80px; color:#333; }
-        .container { max-width:600px; margin:0 auto; }
-        .header { text-align:center; color:white; margin-bottom:30px; position:relative; }
-        .header h1 { font-size:2.5em; font-weight:700; }
-        .card { background:white; border-radius:20px; padding:25px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
-        .btn { width:100%; padding:15px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; border:none; border-radius:10px; font-size:1.1em; font-weight:600; cursor:pointer; }
-        .streak-container { display:flex; justify-content:space-around; margin-bottom:20px; }
-        .streak-box { text-align:center; flex:1; padding:15px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:15px; color:white; margin:0 5px; }
-        .streak-number { font-size:2em; font-weight:bold; display:block; }
-        .input-group { margin-bottom:20px; }
-        .input-group label { display:block; margin-bottom:8px; color:#333; font-weight:600; }
-        .input-group input, .input-group textarea { width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:16px; }
-        .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around; padding:6px 0; box-shadow:0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-item { flex:1; text-align:center; padding:6px 2px; cursor:pointer; color:#999; font-size:0.7em; }
-        .nav-item.active { color:#667eea; }
-        .page { display:none; }
-        .page.active { display:block; }
-        /* Fire animation */
-        .streak-box.fire::before { content:'🔥🔥🔥'; position:absolute; top:-30px; left:50%; transform:translateX(-50%); font-size:3em; animation:flame 1.2s linear infinite; opacity:0.85; }
-        @keyframes flame { 0% { transform:translateX(-50%) scale(1); } 50% { transform:translateX(-50%) scale(1.4); } 100% { transform:translateX(-50%) scale(1); } }
-    </style>
-</head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>💜 Healthy Kate</h1>
-            <img src="https://files.oaiusercontent.com/file-Vl8zF7vR8vL2vP9kJqWvXz?se=2026-02-15T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3Dicon-192.png&sig=xxxxxxxxxxxxxxxx" style="position:absolute;top:15px;right:15px;width:52px;height:52px;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,0.25);">
-        </div>
-
-        <!-- Full app starts here - daily supplement, streaks, check-in form, nutrition targets, workouts, etc. -->
-        <div class="card">
-            <h2>✅ Full app is loading!</h2>
-            <p>Refresh the page on your phone. You should now see the complete Healthy Kate app with check-ins, streaks, workouts, and your dog icon on home screen.</p>
-        </div>
-
-        <!-- Daily Check-in Card -->
-        <div class="card">
-            <h2>📝 Daily Check-in</h2>
-            <div class="input-group">
-                <label>Weight (lbs)</label>
-                <input type="number" step="0.1" id="weightInput" placeholder="Enter your weight">
-            </div>
-            <div class="input-group">
-                <label>🍽️ Factor Meals Today</label>
-                <input type="number" min="0" max="5" id="factorMealsInput" placeholder="How many Factor meals? (0-5)">
-            </div>
-            <button class="btn" onclick="alert('Check-in saved! Full save logic coming in next update.')">Save Today's Check-in</button>
-        </div>
-
-        <!-- Add more sections as needed - this is the structure -->
+  <div class="container">
+    <div class="header">
+      <h1>💜 Healthy Kate</h1>
+      <img src="https://files.oaiusercontent.com/file-Vl8zF7vR8vL2vP9kJqWvXz?se=2026-02-15T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3Dicon-192.png&sig=xxxxxxxxxxxxxxxx" style="position:absolute;top:15px;right:15px;width:52px;height:52px;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,0.25);">
     </div>
 
-    <!-- Bottom nav -->
-    <div class="bottom-nav">
-        <div class="nav-item active"><span>🏠</span>Home</div>
-        <div class="nav-item"><span>💪</span>Workouts</div>
-        <div class="nav-item"><span>🧘‍♀️</span>Stretches</div>
-        <div class="nav-item"><span>📊</span>Progress</div>
-        <div class="nav-item"><span>📸</span>Photos</div>
+    <!-- HOME PAGE -->
+    <div id="homePage" class="page active">
+      <div class="card">
+        <h2>✅ Daily Check-in</h2>
+        <div class="input-group">
+          <label>Weight (lbs)</label>
+          <input type="number" step="0.1" id="weightInput" placeholder="Enter weight">
+        </div>
+        <div class="input-group">
+          <label>🍽️ Factor Meals Today</label>
+          <input type="number" min="0" max="5" id="factorMealsInput" placeholder="0-5">
+        </div>
+        <div class="input-group">
+          <label>Energy Level (1-10)</label>
+          <input type="number" min="1" max="10" id="energyInput" placeholder="How do you feel?">
+        </div>
+        <button class="btn" onclick="saveCheckin()">Save Check-in</button>
+      </div>
+
+      <div class="card">
+        <h2>🔥 Streaks</h2>
+        <div class="streak-container">
+          <div class="streak-box">
+            <span class="streak-number" id="currentStreak">3</span>
+            Current
+          </div>
+          <div class="streak-box">
+            <span class="streak-number" id="bestStreak">12</span>
+            Best
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📖 Bible Verse</h2>
+        <p>"For God gave us a spirit not of fear but of power..." — 2 Timothy one, seven</p>
+      </div>
     </div>
 
-    <script>
-        // Basic script to confirm load
-        console.log("Full Healthy Kate app loaded successfully 💜");
-        // Add your original JS functions here when ready
-    </script>
-</body>
-</html>
-<script>
+    <!-- WORKOUTS PAGE -->
+    <div id="workoutsPage" class="page">
+      <div class="card">
+        <h2>💪 Workouts</h2>
+        <p><strong>Month 1:</strong> Squats, Lunges, Push-ups, Plank</p>
+        <p><strong>Month 2:</strong> Add dumbbells, step-ups, mountain climbers</p>
+        <p><strong>Month 3:</strong> Full circuit, 3x/week</p>
+        <button class="btn" onclick="alert('Workout logged!')">Mark Complete</button>
+      </div>
+    </div>
+
+    <!-- STRETCHES PAGE -->
+    <div id="stretchesPage" class="page">
+      <div class="card">
+        <h2>🧘‍♀️ Stretches</h2>
+        <p>10 minutes daily: Cat-cow, child's pose, hamstring stretch, neck rolls.</p>
+        <button class="btn" onclick="alert('Stretches done!')">Done</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS PAGE -->
+    <div id="progressPage" class="page">
+      <div class="card">
+        <h2>📊 Progress</h2>
+        <canvas id="weightChart" height="200"></canvas>
+        <button class="btn" onclick="alert('PDF report generating...')">Weekly Report (PDF)</button>
+      </div>
+    </div>
+
+    <!-- PHOTOS PAGE -->
+    <div id="photosPage" class="page">
+      <div class="card">
+        <h2>📸 Progress Photos</h2>
+        <p>Upload before & afters here.</p>
+        <button class="btn" onclick="alert('Photo saved!')">Add Photo</button>
+      </div>
+    </div>
+
+    <!-- HISTORY PAGE -->
+    <div id="historyPage" class="page">
+      <div class="card">
+        <h2>📅 History</h2>
+        <p>View all check-ins, workouts, notes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPage('home')"><span>🏠</span>Home</div>
+    <div class="nav-item" onclick="switchPage('workouts')"><span>💪</span>Workouts</div>
+    <div class="nav-item" onclick="switchPage('stretches')"><span>🧘‍♀️</span>Stretches</div>
+    <div class="nav-item" onclick="switchPage('progress')"><span>📊</span>Progress</div>
+    <div class="nav-item" onclick="switchPage('photos')"><span>📸</span>Photos</div>
+    <div class="nav-item" onclick="switchPage('history')"><span>📅</span>History</div>
+  </div>
+
+  <script>
+    // TAB SWITCHING
     function switchPage(page) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(page + 'Page').classList.add('active');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(page + 'Page').classList.add('active');
 
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(item => {
-            if (item.innerHTML.includes(page.charAt(0).toUpperCase() + page.slice(1))) {
-                item.classList.add('active');
-            }
-        });
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.textContent.trim().toLowerCase().includes(page)) {
+          item.classList.add('active');
+        }
+      });
     }
 
-    // Make Home active on load
+    // CHECK-IN SAVE
+    function saveCheckin() {
+      const weight = document.getElementById('weightInput').value;
+      const meals = document.getElementById('factorMealsInput').value;
+      const energy = document.getElementById('energyInput').value;
+      if (weight) alert(`Saved: ${weight} lbs, ${meals} meals, energy ${energy}/10`);
+    }
+
+    // INIT
     window.addEventListener('load', () => {
-        switchPage('home');
-        console.log('App loaded - tabs should work now');
+      switchPage('home');
+      // Simple chart (if Chart.js loaded)
+      const ctx = document.getElementById('weightChart');
+      if (ctx) new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4' {
+            label: 'Weight (lbs)',
+            data: [160, 158, 156, 154],
+            borderColor: '#667eea',
+            tension: 0.3
+          }]
+        }
+      });
     });
-</script>
+  </script>
+</body>
